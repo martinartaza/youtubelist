@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="artaza" translate="label" sortOrder="999">
+            <label>artaza</label>
+        </tab>
+        <section id="youtubelist" 
+                 sortOrder="10" 
+                 showInWebsite="1" 
+                 showInStore="1" 
+                 showInDefault="1" 
+                 translate="label">
+            <label>youtubelist</label>
+            <tab>artaza</tab>
+            <resource>Artaza_YoutubeList::config_artaza_youtubelist</resource>
+            <group id="general" 
+                   sortOrder="10" 
+                   showInWebsite="1" 
+                   showInStore="1" 
+                   showInDefault="1" 
+                   translate="label">
+                <label>general</label>
+                <field id="enabled" 
+                       type="select" 
+                       sortOrder="10" 
+                       showInWebsite="1" 
+                       showInStore="1" 
+                       showInDefault="1" 
+                       translate="label">
+                    <label>enabled</label>
+                    <comment/>
+                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

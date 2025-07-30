@@ -1,0 +1,22 @@
+{
+    "name": "artaza/module-youtubelist",
+    "description": "Add attribute on product and show list of videos",
+    "type": "magento2-module",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Sebastian Artaza",
+            "email": "martin.artaza@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Artaza\\YoutubeList\\": ""
+        }
+    }
+}

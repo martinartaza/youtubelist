@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/9.5/phpunit.xsd"
+         bootstrap="../../../../dev/tests/unit/framework/bootstrap.php"
+         colors="true"
+         beStrictAboutTestsThatDoNotTestAnything="false"
+         beStrictAboutOutputDuringTests="false"
+         beStrictAboutTestSize="false"
+         beStrictAboutTodoAnnotatedTests="false"
+         convertErrorsToExceptions="false"
+         convertNoticesToExceptions="false"
+         convertWarningsToExceptions="false"
+         processIsolation="false"
+         stopOnFailure="false"
+         syntaxCheck="false">
+    <testsuite name="Artaza_YoutubeList_Unit">
+        <directory suffix="Test.php">.</directory>
+    </testsuite>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">../../</directory>
+            <exclude>
+                <directory suffix=".php">../../Test/</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit> 

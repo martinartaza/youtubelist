@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Artaza_YoutubeList::css/listyoutube.css" />
+        <script src="Artaza_YoutubeList::js/youtube-list.js" />
+    </head>
+    <body>
+        <referenceBlock name="product.info.details">
+            <block class="Magento\Framework\View\Element\Template"
+                   ifconfig="youtubelist/general/enabled"
+                   name="youtube_list"
+                   as="youtube_videos"
+                   template="Artaza_YoutubeList::productPage.phtml"
+                   group="detailed_info">
+                <arguments>
+                    <argument translate="true" name="title" xsi:type="string">Videos</argument>
+                    <argument name="sort_order" xsi:type="string">30</argument>
+                    <argument name="view_model" xsi:type="object">Artaza\YoutubeList\ViewModel\ProductPage</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>
