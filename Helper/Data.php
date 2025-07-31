@@ -112,7 +112,7 @@ class Data extends AbstractHelper
                 }
                 return '';
             }
-            
+
             $youtubeUrl = $product->getYoutubelist();
             if (empty($youtubeUrl)) {
                 if ($this->_logger) {
@@ -120,7 +120,7 @@ class Data extends AbstractHelper
                 }
                 return '';
             }
-            
+
             return $youtubeUrl;
         } catch (\Exception $e) {
             if ($this->_logger) {
@@ -254,7 +254,7 @@ class Data extends AbstractHelper
             if ($this->_logger) {
                 $this->_logger->debug('Built YouTube API URL: ' . $apiUrl);
             }
-            
+
             return $apiUrl;
         } catch (\Exception $e) {
             if ($this->_logger) {
@@ -282,7 +282,7 @@ class Data extends AbstractHelper
 
             $this->_curl->setTimeout(30);
             $this->_curl->get($apiUrl);
-            
+
             $httpCode = $this->_curl->getStatus();
             if ($httpCode !== 200) {
                 if ($this->_logger) {
@@ -354,7 +354,7 @@ class Data extends AbstractHelper
         try {
             $arrayVideos = [];
             $response = $this->getResponseYoutube();
-            
+
             if (empty($response)) {
                 if ($this->_logger) {
                     $this->_logger->warning('Empty response received for list video request');
@@ -437,7 +437,7 @@ class Data extends AbstractHelper
             if ($this->isOnly()) {
                 $url = $this->getUrlProduct();
                 $videoIdPosition = strpos($url, '=');
-                
+
                 if ($videoIdPosition === false) {
                     if ($this->_logger) {
                         $this->_logger->error('Cannot extract video ID from URL: ' . $url);
@@ -505,5 +505,86 @@ class Data extends AbstractHelper
             }
             return [];
         }
+    }
+
+    /**
+     * Get list of videos from YouTube URLs
+     *
+     * @param string $youtubeListUrl
+     * @return string[]
+     */
+    public function listVideos(string $youtubeListUrl): array
+    {
+        $videos = [];
+        $urls = explode(',', $youtubeListUrl);
+
+        foreach ($urls as $url) {
+            $url = trim($url);
+            if (!$url) {
+                continue;
+            }
+            $videoId = $this->extractYoutubeId($url);
+            if ($videoId) {
+                $videos[] = [
+                    'url' => $url,
+                    'image' => "https://img.youtube.com/vi/{$videoId}/mqdefault.jpg"
+                ];
+            }
+        }
+        return $videos;
+    }
+
+    /**
+     * Extract YouTube video ID from URL
+     *
+     * @param string $url
+     * @return string|null
+     */
+    private function extractYoutubeId($url)
+    {
+        if (preg_match('~(?:youtu\.be/|youtube\.com/(?:embed/|v/|watch\?v=|watch\?.+&v=))([^?&/]+)~', $url, $matches)) {
+            return $matches[1];
+        }
+        return null;
+    }
+
+    /**
+     * Get videos formatted for GraphQL response
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return array
+     */
+    public function getGraphQLVideos($product): array
+    {
+        // Set the product in registry for the helper
+        $this->_coreRegistry->register('product', $product);
+        
+        // Get videos using the same method as ViewModel
+        $videos = $this->getArrayVideos();
+        
+        // Format the response for GraphQL
+        $formattedVideos = [];
+        foreach ($videos as $video) {
+            $formattedVideo = [
+                'url' => $video['url']
+            ];
+            
+            // Handle image - it can be an object or a string
+            if (isset($video['image'])) {
+                if (is_object($video['image']) && isset($video['image']->medium)) {
+                    $formattedVideo['image'] = $video['image']->medium->url ?? '';
+                } elseif (is_string($video['image'])) {
+                    $formattedVideo['image'] = $video['image'];
+                } else {
+                    $formattedVideo['image'] = '';
+                }
+            } else {
+                $formattedVideo['image'] = '';
+            }
+            
+            $formattedVideos[] = $formattedVideo;
+        }
+        
+        return $formattedVideos;
     }
 }

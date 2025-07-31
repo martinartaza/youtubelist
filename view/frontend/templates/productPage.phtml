@@ -27,9 +27,9 @@ $arrayVideos = $viewModel->getVideos();
                     <?php foreach ($arrayVideos as $index => $itemVideo): ?>
                         <div id="youtubeItemContainer_<?= $escaper->escapeHtmlAttr($index) ?>" 
                              class="youtubeItemContainerItems <?= ($index == 0) ? ' first' : '' ?>">
-                            <?php 
+                            <?php
                                 $medium = $itemVideo['image']->medium ?? null;
-                                if ($medium && isset($medium->url, $medium->width, $medium->height)):
+                            if ($medium && isset($medium->url, $medium->width, $medium->height)):
                                     $urlImage = $medium->url;
                                     $withImage = $medium->width;
                                     $heightImage = $medium->height;
@@ -38,7 +38,7 @@ $arrayVideos = $viewModel->getVideos();
                                 <div class="youtubeItemContainerImg" 
                                      style="background-image: url(<?= $escaper->escapeUrl($urlImage) ?>);
                                             width:<?= $escaper->escapeHtmlAttr($withImage) ?>px;
-                                            height: <?= $escaper->escapeHtmlAttr($heightImage) ?>px;
+                                            height:<?= $escaper->escapeHtmlAttr($heightImage) ?>px;
                                             margin: 0 auto;
                                             cursor: pointer;
                                             position: relative;">
@@ -63,4 +63,4 @@ $arrayVideos = $viewModel->getVideos();
         }
         </script>
     <?php endif; ?>
-<?php endif; ?> 
+<?php endif; ?>

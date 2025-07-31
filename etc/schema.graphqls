@@ -1,0 +1,8 @@
+type ProductInterface {
+  youtube_videos: [YoutubeVideo] @resolver(class: "Artaza\\YoutubeList\\Model\\Resolver\\YoutubeVideos")
+}
+
+type YoutubeVideo {
+  url: String
+  image: String
+}

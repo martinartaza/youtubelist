@@ -393,4 +393,284 @@ class DataTest extends TestCase
         $this->assertIsArray($result);
         $this->assertEmpty($result);
     }
+
+    /**
+     * Test getGraphQLVideos method with valid product and list videos
+     */
+    public function testGetGraphQLVideosWithListVideos()
+    {
+        $listUrl = 'https://www.youtube.com/watch?v=test&list=testlist';
+        $this->productMock->method('getYoutubelist')
+            ->willReturn($listUrl);
+        
+        $this->registryMock->expects($this->once())
+            ->method('register')
+            ->with('product', $this->productMock);
+
+        // Mock getArrayVideos to return expected data
+        $expectedArrayVideos = [
+            [
+                'url' => 'https://www.youtube.com/embed/test123',
+                'image' => (object)['medium' => (object)['url' => 'test.jpg']]
+            ]
+        ];
+
+        $this->helper = $this->getMockBuilder(Data::class)
+            ->setConstructorArgs([
+                $this->contextMock,
+                $this->curlMock,
+                $this->registryMock,
+                $this->loggerMock
+            ])
+            ->onlyMethods(['getArrayVideos'])
+            ->getMock();
+
+        $this->helper->expects($this->once())
+            ->method('getArrayVideos')
+            ->willReturn($expectedArrayVideos);
+
+        $result = $this->helper->getGraphQLVideos($this->productMock);
+        
+        $this->assertIsArray($result);
+        $this->assertCount(1, $result);
+        $this->assertArrayHasKey('url', $result[0]);
+        $this->assertArrayHasKey('image', $result[0]);
+        $this->assertEquals('https://www.youtube.com/embed/test123', $result[0]['url']);
+        $this->assertEquals('test.jpg', $result[0]['image']);
+    }
+
+    /**
+     * Test getGraphQLVideos method with single video
+     */
+    public function testGetGraphQLVideosWithSingleVideo()
+    {
+        $onlyUrl = 'https://www.youtube.com/watch?v=test123';
+        $this->productMock->method('getYoutubelist')
+            ->willReturn($onlyUrl);
+        
+        $this->registryMock->expects($this->once())
+            ->method('register')
+            ->with('product', $this->productMock);
+
+        // Mock getArrayVideos to return expected data
+        $expectedArrayVideos = [
+            [
+                'url' => 'https://www.youtube.com/embed/test123',
+                'image' => ''
+            ]
+        ];
+
+        $this->helper = $this->getMockBuilder(Data::class)
+            ->setConstructorArgs([
+                $this->contextMock,
+                $this->curlMock,
+                $this->registryMock,
+                $this->loggerMock
+            ])
+            ->onlyMethods(['getArrayVideos'])
+            ->getMock();
+
+        $this->helper->expects($this->once())
+            ->method('getArrayVideos')
+            ->willReturn($expectedArrayVideos);
+
+        $result = $this->helper->getGraphQLVideos($this->productMock);
+        
+        $this->assertIsArray($result);
+        $this->assertCount(1, $result);
+        $this->assertArrayHasKey('url', $result[0]);
+        $this->assertArrayHasKey('image', $result[0]);
+        $this->assertEquals('https://www.youtube.com/embed/test123', $result[0]['url']);
+        $this->assertEquals('', $result[0]['image']);
+    }
+
+    /**
+     * Test getGraphQLVideos method with embed video
+     */
+    public function testGetGraphQLVideosWithEmbedVideo()
+    {
+        $embedUrl = 'https://www.youtube.com/embed/test123';
+        $this->productMock->method('getYoutubelist')
+            ->willReturn($embedUrl);
+        
+        $this->registryMock->expects($this->once())
+            ->method('register')
+            ->with('product', $this->productMock);
+
+        // Mock getArrayVideos to return expected data
+        $expectedArrayVideos = [
+            [
+                'url' => 'https://www.youtube.com/embed/test123',
+                'image' => ''
+            ]
+        ];
+
+        $this->helper = $this->getMockBuilder(Data::class)
+            ->setConstructorArgs([
+                $this->contextMock,
+                $this->curlMock,
+                $this->registryMock,
+                $this->loggerMock
+            ])
+            ->onlyMethods(['getArrayVideos'])
+            ->getMock();
+
+        $this->helper->expects($this->once())
+            ->method('getArrayVideos')
+            ->willReturn($expectedArrayVideos);
+
+        $result = $this->helper->getGraphQLVideos($this->productMock);
+        
+        $this->assertIsArray($result);
+        $this->assertCount(1, $result);
+        $this->assertArrayHasKey('url', $result[0]);
+        $this->assertArrayHasKey('image', $result[0]);
+        $this->assertEquals('https://www.youtube.com/embed/test123', $result[0]['url']);
+        $this->assertEquals('', $result[0]['image']);
+    }
+
+    /**
+     * Test getGraphQLVideos method with invalid URL
+     */
+    public function testGetGraphQLVideosWithInvalidUrl()
+    {
+        $invalidUrl = 'https://example.com/invalid';
+        $this->productMock->method('getYoutubelist')
+            ->willReturn($invalidUrl);
+        
+        $this->registryMock->expects($this->once())
+            ->method('register')
+            ->with('product', $this->productMock);
+
+        $result = $this->helper->getGraphQLVideos($this->productMock);
+        
+        $this->assertIsArray($result);
+        $this->assertEmpty($result);
+    }
+
+    /**
+     * Test getGraphQLVideos method with empty URL
+     */
+    public function testGetGraphQLVideosWithEmptyUrl()
+    {
+        $this->productMock->method('getYoutubelist')
+            ->willReturn('');
+        
+        $this->registryMock->expects($this->once())
+            ->method('register')
+            ->with('product', $this->productMock);
+
+        $result = $this->helper->getGraphQLVideos($this->productMock);
+        
+        $this->assertIsArray($result);
+        $this->assertEmpty($result);
+    }
+
+    /**
+     * Test getGraphQLVideos method with null URL
+     */
+    public function testGetGraphQLVideosWithNullUrl()
+    {
+        $this->productMock->method('getYoutubelist')
+            ->willReturn(null);
+        
+        $this->registryMock->expects($this->once())
+            ->method('register')
+            ->with('product', $this->productMock);
+
+        $result = $this->helper->getGraphQLVideos($this->productMock);
+        
+        $this->assertIsArray($result);
+        $this->assertEmpty($result);
+    }
+
+    /**
+     * Test getGraphQLVideos method with complex image object
+     */
+    public function testGetGraphQLVideosWithComplexImageObject()
+    {
+        $listUrl = 'https://www.youtube.com/watch?v=test&list=testlist';
+        $this->productMock->method('getYoutubelist')
+            ->willReturn($listUrl);
+        
+        $this->registryMock->expects($this->once())
+            ->method('register')
+            ->with('product', $this->productMock);
+
+        // Mock getArrayVideos to return expected data
+        $expectedArrayVideos = [
+            [
+                'url' => 'https://www.youtube.com/embed/complex123',
+                'image' => (object)['medium' => (object)['url' => 'complex_image.jpg']]
+            ]
+        ];
+
+        $this->helper = $this->getMockBuilder(Data::class)
+            ->setConstructorArgs([
+                $this->contextMock,
+                $this->curlMock,
+                $this->registryMock,
+                $this->loggerMock
+            ])
+            ->onlyMethods(['getArrayVideos'])
+            ->getMock();
+
+        $this->helper->expects($this->once())
+            ->method('getArrayVideos')
+            ->willReturn($expectedArrayVideos);
+
+        $result = $this->helper->getGraphQLVideos($this->productMock);
+        
+        $this->assertIsArray($result);
+        $this->assertCount(1, $result);
+        $this->assertArrayHasKey('url', $result[0]);
+        $this->assertArrayHasKey('image', $result[0]);
+        $this->assertEquals('https://www.youtube.com/embed/complex123', $result[0]['url']);
+        $this->assertEquals('complex_image.jpg', $result[0]['image']);
+    }
+
+    /**
+     * Test getGraphQLVideos method with string image
+     */
+    public function testGetGraphQLVideosWithStringImage()
+    {
+        $listUrl = 'https://www.youtube.com/watch?v=test&list=testlist';
+        $this->productMock->method('getYoutubelist')
+            ->willReturn($listUrl);
+        
+        $this->registryMock->expects($this->once())
+            ->method('register')
+            ->with('product', $this->productMock);
+
+        // Mock getArrayVideos to return expected data
+        $expectedArrayVideos = [
+            [
+                'url' => 'https://www.youtube.com/embed/string123',
+                'image' => 'string_image.jpg'
+            ]
+        ];
+
+        $this->helper = $this->getMockBuilder(Data::class)
+            ->setConstructorArgs([
+                $this->contextMock,
+                $this->curlMock,
+                $this->registryMock,
+                $this->loggerMock
+            ])
+            ->onlyMethods(['getArrayVideos'])
+            ->getMock();
+
+        $this->helper->expects($this->once())
+            ->method('getArrayVideos')
+            ->willReturn($expectedArrayVideos);
+
+        $result = $this->helper->getGraphQLVideos($this->productMock);
+        
+        $this->assertIsArray($result);
+        $this->assertCount(1, $result);
+        $this->assertArrayHasKey('url', $result[0]);
+        $this->assertArrayHasKey('image', $result[0]);
+        $this->assertEquals('https://www.youtube.com/embed/string123', $result[0]['url']);
+        $this->assertEquals('string_image.jpg', $result[0]['image']);
+    }
 }

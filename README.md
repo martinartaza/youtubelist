@@ -1,58 +1,266 @@
-# Mage2 Module Artaza YoutubeList
+# YouTube List Module for Magento 2
 
-    ``artaza/module-youtubelist``
+[![Magento 2](https://img.shields.io/badge/Magento-2.4+-orange.svg)](https://magento.com/)
+[![PHP](https://img.shields.io/badge/PHP-8.1+-blue.svg)](https://php.net/)
+[![License](https://img.shields.io/badge/License-OSL--3.0-green.svg)](https://opensource.org/licenses/OSL-3.0)
 
- - [Main Functionalities](#markdown-header-main-functionalities)
- - [Installation](#markdown-header-installation)
- - [Configuration](#markdown-header-configuration)
- - [Specifications](#markdown-header-specifications)
- - [Attributes](#markdown-header-attributes)
+A powerful Magento 2 module that allows you to add YouTube video lists to your products. Display embedded videos, playlists, and individual videos with a beautiful carousel interface.
 
+## 📋 Table of Contents
 
-## Main Functionalities
-Add attribute on product and show list of videos
+- [Features](#-features)
+- [Screenshots](#-screenshots)
+- [Installation](#-installation)
+- [Configuration](#-configuration)
+- [Usage](#-usage)
+- [GraphQL API](#graphql-api)
+- [Testing](#-testing)
+- [Code Quality](#-code-quality)
+- [Architecture](#-architecture)
+- [Contributing](#-contributing)
 
-## Installation
-\* = in production please use the `--keep-generated` option
+## ✨ Features
 
-### Type 1: Zip file
+- **YouTube Video Integration**: Add YouTube videos to any product
+- **Multiple Video Support**: Support for playlists, individual videos, and embedded videos
+- **Beautiful UI**: Responsive carousel interface for multiple videos
+- **GraphQL API**: Full GraphQL support for headless implementations
+- **Admin Configuration**: Easy setup through Magento admin
+- **YouTube API Integration**: Automatic thumbnail and video data fetching
+- **Responsive Design**: Works perfectly on desktop and mobile devices
 
- - Unzip the zip file in `app/code/Artaza`
- - Enable the module by running `php bin/magento module:enable Artaza_YoutubeList`
- - Apply database updates by running `php bin/magento setup:upgrade`\*
- - Flush the cache by running `php bin/magento cache:flush`
+## 📸 Screenshots
 
-### Type 2: Composer
+### Product Page Display
+![Product Page YouTube Videos](docs/images/image_pdp.png)
 
- - Make the module available in a composer repository for example:
-    - private repository `repo.magento.com`
-    - public repository `packagist.org`
-    - public github repository as vcs
- - Add the composer repository to the configuration by running `composer config repositories.repo.magento.com composer https://repo.magento.com/`
- - Install the module composer by running `composer require artaza/module-youtubelist`
- - enable the module by running `php bin/magento module:enable Artaza_YoutubeList`
- - apply database updates by running `php bin/magento setup:upgrade`\*
- - Flush the cache by running `php bin/magento cache:flush`
+### Admin Configuration
+![Admin Configuration](docs/images/imagen_backend_config_settings_youtube.png)
 
+### Product Attribute Setup
+![Product Attribute Setup](docs/images/image_product_set_youtube_attribue.png)
 
-## Configuration
+## 🚀 Installation
 
- - YouTube API Key (Catalog/Catalog/Product Video) *important 
- - enabled (youtubelist/general/enabled)
+### Method 1: Composer (Recommended)
 
+```bash
+composer require artaza/module-youtubelist
+bin/magento module:enable Artaza_YoutubeList
+bin/magento setup:upgrade
+bin/magento cache:flush
+```
 
-## Specifications
+### Method 2: Manual Installation
 
- - ViewModel
-	- ProductPage > productPage.phtml
+1. Download the module files
+2. Place them in `app/code/Artaza/YoutubeList/`
+3. Run the following commands:
 
- - Helper
-	- Artaza\YoutubeList\Helper\Data
+```bash
+bin/magento module:enable Artaza_YoutubeList
+bin/magento setup:upgrade
+bin/magento cache:flush
+```
 
-## Attributes
+## ⚙️ Configuration
 
- - Product - YoutubeList (youtubelist)
+### 1. YouTube API Key Setup
 
-# Test
- - DataTest
- - ProductPageTest
+1. Go to **Stores > Configuration > Catalog > Catalog > Product Video**
+2. Enter your YouTube API Key
+3. Save the configuration
+
+### 2. Module Configuration
+
+1. Go to **Stores > Configuration > Artaza > YouTube List**
+2. Enable the module
+3. Configure additional settings as needed
+
+## 📝 Usage
+
+### Adding YouTube Videos to Products
+
+1. **Navigate to a Product**: Go to **Catalog > Products** and edit any product
+2. **Add YouTube URL**: In the product form, find the "Youtube List" attribute
+3. **Enter YouTube URL**: Add your YouTube URL in one of these formats:
+
+#### Supported URL Formats:
+
+- **Playlist**: `https://www.youtube.com/watch?v=SzZxQIOill4&list=PLDRI6kWi9D9K1TTYIJDUPIF6wt462thBL`
+- **Single Video**: `https://www.youtube.com/watch?v=SzZxQIOill4`
+- **Embed URL**: `https://www.youtube.com/embed/SzZxQIOill4`
+- **Multiple Videos**: Separate multiple URLs with commas
+
+#### Example:
+```
+https://www.youtube.com/watch?v=SzZxQIOill4&list=PLDRI6kWi9D9K1TTYIJDUPIF6wt462thBL
+```
+
+4. **Save the Product**: The videos will automatically appear on the product page
+
+### Frontend Display
+
+The module automatically displays:
+- **First Video**: As the main embedded player
+- **Additional Videos**: In a beautiful carousel below
+- **Thumbnails**: Automatic YouTube thumbnails
+- **Responsive Design**: Works on all devices
+
+## 🔌 GraphQL API
+
+The module provides full GraphQL support for headless implementations:
+
+### Query Example
+
+```graphql
+{
+  products(filter: { sku: { eq: "24-WB04" } }) {
+    items {
+      name
+      sku
+      youtube_videos {
+        url
+        image
+      }
+    }
+  }
+}
+```
+
+### Response Example
+
+```json
+{
+  "data": {
+    "products": {
+      "items": [
+        {
+          "name": "Push It Messenger Bag",
+          "sku": "24-WB04",
+          "youtube_videos": [
+            {
+              "url": "https://www.youtube.com/embed/SzZxQIOill4",
+              "image": "https://img.youtube.com/vi/SzZxQIOill4/mqdefault.jpg"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+## 🧪 Testing
+
+The module includes comprehensive unit tests following Magento 2 standards.
+
+### Running Tests
+
+```bash
+# Run all tests
+vendor/bin/phpunit app/code/Artaza/YoutubeList/Test/Unit/
+
+# Run specific test classes
+vendor/bin/phpunit app/code/Artaza/YoutubeList/Test/Unit/Helper/DataTest.php
+vendor/bin/phpunit app/code/Artaza/YoutubeList/Test/Unit/Model/Resolver/YoutubeVideosTest.php
+```
+
+### Test Coverage
+
+- ✅ **Helper Tests**: Complete coverage of `Data` helper methods
+- ✅ **Resolver Tests**: Full coverage of GraphQL resolver
+- ✅ **ViewModel Tests**: Product page view model testing
+- ✅ **Edge Cases**: Null values, invalid URLs, empty responses
+
+## 🎯 Code Quality
+
+The module follows Magento 2 coding standards and best practices:
+
+### Code Standards
+
+- ✅ **PSR-4 Autoloading**: Proper namespace structure
+- ✅ **Magento 2 Standards**: Follows official coding guidelines
+- ✅ **PHPCS Compliance**: Passes Magento 2 coding standards
+- ✅ **Type Declarations**: Full PHP 8.1+ type support
+- ✅ **Documentation**: Comprehensive PHPDoc blocks
+
+### Quality Checks
+
+```bash
+# Run coding standards check
+vendor/bin/phpcs --standard=Magento2 app/code/Artaza/YoutubeList/
+
+# Auto-fix coding standards
+vendor/bin/phpcbf --standard=Magento2 app/code/Artaza/YoutubeList/
+```
+
+## 🏗️ Architecture
+
+### Module Structure
+
+```
+Artaza_YoutubeList/
+├── Helper/
+│   └── Data.php                 # Core YouTube API integration
+├── Model/
+│   └── Resolver/
+│       └── YoutubeVideos.php    # GraphQL resolver
+├── ViewModel/
+│   └── ProductPage.php          # Product page view model
+├── view/
+│   └── frontend/
+│       └── templates/
+│           └── productPage.phtml # Frontend template
+├── etc/
+│   ├── catalog_attributes.xml   # Product attribute definition
+│   └── schema.graphqls         # GraphQL schema
+└── Test/
+    └── Unit/                    # Unit tests
+```
+
+### Key Components
+
+- **Helper (Data)**: Handles YouTube API calls and video processing
+- **GraphQL Resolver**: Provides API access to video data
+- **ViewModel**: Manages product page video display
+- **Template**: Renders the video carousel interface
+
+## 🤝 Contributing
+
+We welcome contributions! Please follow these guidelines:
+
+1. **Fork the repository**
+2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
+3. **Follow coding standards**: Run PHPCS before submitting
+4. **Add tests**: Include unit tests for new functionality
+5. **Submit a pull request**
+
+### Development Setup
+
+```bash
+# Install dependencies
+composer install
+
+# Run tests
+vendor/bin/phpunit app/code/Artaza/YoutubeList/Test/Unit/
+
+# Check coding standards
+vendor/bin/phpcs --standard=Magento2 app/code/Artaza/YoutubeList/
+```
+
+## 📄 License
+
+This module is licensed under the [OSL 3.0](https://opensource.org/licenses/OSL-3.0) license.
+
+## 🆘 Support
+
+For support, please:
+
+1. Check the [documentation](#-usage)
+2. Review [existing issues](https://github.com/your-repo/issues)
+3. Create a new issue with detailed information
+
+---
+
+**Made with ❤️ for the Magento 2 community**

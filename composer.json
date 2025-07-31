@@ -10,7 +10,9 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+        "magento/module-graphql": "*"
+    },
     "autoload": {
         "files": [
             "registration.php"
