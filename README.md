@@ -142,7 +142,15 @@ The module provides full GraphQL support for headless implementations:
             {
               "url": "https://www.youtube.com/embed/SzZxQIOill4",
               "image": "https://img.youtube.com/vi/SzZxQIOill4/mqdefault.jpg"
-            }
+            },
+            {
+                  "url": "https://www.youtube.com/embed/nqTFVFWa-n0",
+                  "image": "https://i.ytimg.com/vi/nqTFVFWa-n0/mqdefault.jpg"
+            },
+            {
+                  "url": "https://www.youtube.com/embed/W9P-ykNCNjE",
+                  "image": "https://i.ytimg.com/vi/W9P-ykNCNjE/mqdefault.jpg"
+            }            
           ]
         }
       ]
