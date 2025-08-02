@@ -209,22 +209,58 @@ vendor/bin/phpcbf --standard=Magento2 app/code/Artaza/YoutubeList/
 
 ```
 Artaza_YoutubeList/
+├── composer.json                 # Composer configuration
+├── registration.php              # Module registration
+├── README.md                     # Module documentation
 ├── Helper/
-│   └── Data.php                 # Core YouTube API integration
+│   └── Data.php                  # Core YouTube API integration
 ├── Model/
 │   └── Resolver/
 │       └── YoutubeVideos.php    # GraphQL resolver
 ├── ViewModel/
 │   └── ProductPage.php          # Product page view model
+├── Setup/
+│   └── Patch/
+│       └── Data/
+│           └── AddYoutubelistProductAttribute.php  # Data patch for attribute
+├── etc/
+│   ├── module.xml               # Module definition
+│   ├── config.xml               # Module configuration
+│   ├── acl.xml                  # Access Control List
+│   ├── catalog_attributes.xml   # Product attribute definition
+│   ├── schema.graphqls          # GraphQL schema
+│   └── adminhtml/
+│       └── system.xml           # Admin configuration
 ├── view/
 │   └── frontend/
-│       └── templates/
-│           └── productPage.phtml # Frontend template
-├── etc/
-│   ├── catalog_attributes.xml   # Product attribute definition
-│   └── schema.graphqls         # GraphQL schema
+│       ├── layout/
+│       │   └── catalog_product_view.xml  # Product page layout
+│       ├── templates/
+│       │   └── productPage.phtml         # Frontend template
+│       └── web/
+│           ├── css/
+│           │   └── listyoutube.css       # Frontend styles
+│           ├── js/
+│           │   └── youtube-list.js       # Frontend JavaScript
+│           └── images/
+│               ├── youtube-logo.png      # YouTube logo
+│               ├── play.png              # Play button
+│               └── arrow.svg             # Carousel arrows
+├── i18n/
+│   └── es_CL.csv                # Spanish translations
+├── docs/
+│   └── images/                  # Documentation images
 └── Test/
-    └── Unit/                    # Unit tests
+    └── Unit/
+        ├── phpunit.xml           # PHPUnit configuration
+        ├── README.md             # Test documentation
+        ├── Helper/
+        │   └── DataTest.php      # Helper unit tests
+        ├── Model/
+        │   └── Resolver/
+        │       └── YoutubeVideosTest.php  # Resolver unit tests
+        └── ViewModel/
+            └── ProductPageTest.php        # ViewModel unit tests
 ```
 
 ### Key Components
